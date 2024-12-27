@@ -3,15 +3,11 @@ from flask import Flask, request, send_file
 from gtts import gTTS
 from io import BytesIO
 from transformers import pipeline
-from flask_cors import CORS  # Added CORS to handle cross-origin requests
 
 app = Flask(__name__)
 
-# Enable CORS for cross-origin requests (if needed)
-CORS(app)
-
-# Initialize the summarizer model
-summarizer = pipeline("summarization")
+# Initialize the summarizer model with a smaller model
+summarizer = pipeline("summarization", model="facebook/bart-base")
 
 def generate_audio(text, lang='en'):
     """Generate an audio file from text using gTTS."""
@@ -44,22 +40,13 @@ def upload():
     file = request.files['file']
     if file.filename == '':
         return "No selected file", 400
-    try:
-        text = file.read().decode('utf-8')
-    except UnicodeDecodeError:
-        return "File could not be decoded. Please upload a valid text file.", 400
-    
-    # Get the option (narrate, summarize, explain) from the form
+    text = file.read().decode('utf-8')
     option = request.form.get('option', 'narrate')
-    
     if option == 'summarize':
         text = summarize_text(text)
     elif option == 'explain':
         text = explain_text(text)
-    
     audio_file = generate_audio(text)
-    
-    # Send the generated audio file as a response
     return send_file(audio_file, mimetype='audio/mp3', as_attachment=True, download_name="audiobook.mp3")
 
 if __name__ == '__main__':
