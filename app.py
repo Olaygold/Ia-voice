@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, request, send_file, send_from_directory
 from gtts import gTTS
 import os
 from io import BytesIO
@@ -27,7 +27,8 @@ def explain_text(text):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    # Serve the HTML file directly from the same folder
+    return send_file('index.html')
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -55,6 +56,11 @@ def upload():
     
     # Send the audio file to the user
     return send_file(audio_file, mimetype='audio/mp3', as_attachment=True, download_name="audiobook.mp3")
+
+# Serve static files (CSS, JS, etc.) directly from the same folder
+@app.route('/static/<filename>')
+def static_files(filename):
+    return send_from_directory(os.getcwd(), filename)
 
 if __name__ == '__main__':
     app.run(debug=True)
