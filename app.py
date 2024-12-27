@@ -60,7 +60,8 @@ def upload():
 # Serve static files (CSS, JS, etc.) directly from the same folder
 @app.route('/static/<filename>')
 def static_files(filename):
-    return send_from_directory(os.getcwd(), filename)
+    return send_from_directory(os.getcwd(), 'static', filename)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))  # Ensure proper port binding for Render
+    app.run(host='0.0.0.0', port=port, debug=True)
