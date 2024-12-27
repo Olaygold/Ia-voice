@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Audiobook</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Create Your Audiobook</h1>
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <label for="file">Upload your text file:</label>
+            <input type="file" name="file" id="file" required><br><br>
+
+            <label for="option">Choose an option:</label>
+            <select name="option" id="option">
+                <option value="narrate">Narrate</option>
+                <option value="summarize">Summarize</option>
+                <option value="explain">Explain</option>
+            </select><br><br>
+
+            <button type="submit">Generate Audiobook</button>
+        </form>
+    </div>
+</body>
+</html>
